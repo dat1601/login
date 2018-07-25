@@ -22,7 +22,7 @@ export function submit(username, password, args = {}) {
       // doRequest is a placeholder Promise. You should replace it with your own logic.
       // See the real-word example at:  https://github.com/supnate/rekit/blob/master/src/features/home/redux/fetchRedditReactjsList.js
       // args.error here is only for test coverage purpose.
-      const doRequest = axios.post('http://192.168.0.164:3000/api/users/login', {"email":username,"password":password});
+      const doRequest = axios.post('http://konttiserver.research.hamk.fi:10000/api/users/login', {"email":username,"password":password});
       doRequest.then(
         (res) => {
           dispatch({

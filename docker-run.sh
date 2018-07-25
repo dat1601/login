@@ -1,1 +1,2 @@
-docker run -dit -p 127.0.0.1:9010:80 --name kontti-diagram kontti-diagram-docker
+docker build -t loopback-login .
+docker run -dit -p 127.0.0.1:10001:80 --name loopback-login-web loopback-login
