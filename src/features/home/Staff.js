@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
 import Login from './Login';
+import { Route, Redirect } from 'react-router-dom';
 
 export class Staff extends Component {
   static propTypes = {
@@ -12,9 +13,29 @@ export class Staff extends Component {
   };
 
   render() {
+    const Protected = () => <h2>Staff</h2>;
+
+    const PrivateRoute = ({ component: Component, ...rest }) => (
+      <Route
+        {...rest}
+        render={props =>
+          this.props.home.isAuthenticated === true ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: props.location },
+              }}
+            />
+          )
+        }
+      />
+    );
+
     return (
       <div className="home-staff">
-        <Login />
+        <PrivateRoute path="/staff" component={Protected} />
       </div>
     );
   }
@@ -30,11 +51,11 @@ function mapStateToProps(state) {
 /* istanbul ignore next */
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ ...actions }, dispatch)
+    actions: bindActionCreators({ ...actions }, dispatch),
   };
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Staff);

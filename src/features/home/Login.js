@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from './redux/actions';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
 export class Login extends Component {
   static propTypes = {
@@ -21,7 +22,11 @@ export class Login extends Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0 && !this.state.email.includes(';');
+    return (
+      this.state.email.length > 0 &&
+      this.state.password.length > 0 &&
+      !this.state.email.includes(';')
+    );
   }
 
   handleChange = event => {
@@ -32,11 +37,17 @@ export class Login extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-    this.props.actions.submit(this.state.email,this.state.password);
+    this.props.actions.submit(this.state.email, this.state.password);
+    this.props.actions.authenticate();
   };
 
   render() {
-    return (
+    const { redirectToReferrer } = this.props.home;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+
+    return redirectToReferrer ? (
+      <Redirect to={from} />
+    ) : (
       <div className="home-login">
         <div className="Login">
           <form onSubmit={this.handleSubmit}>
